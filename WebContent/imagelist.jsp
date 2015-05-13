@@ -9,7 +9,8 @@
 <title>Web Image Filter</title>
 </head>
 <body>
-	<c:out value="Image"></c:out>
-	<img alt="" src="ImageListServlet" height="400" width="600">
+	<c:out value="Image ${first}!"></c:out>
+	<img alt="" src="ImageListServlet/${first}" height="400" width="600">
+
 </body>
 </html>
