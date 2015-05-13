@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -12,7 +11,6 @@ import javax.imageio.ImageIO;
 
 import org.junit.Test;
 
-import com.jhlabs.image.CurlFilter;
 import com.jhlabs.image.DiffusionFilter;
 
 public class ApplyFilterTest {
