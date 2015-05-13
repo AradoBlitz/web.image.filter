@@ -26,7 +26,7 @@ public class ImageManagerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setAttribute("first", 1);
+		request.setAttribute("imagesNumber", 3);
 		request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 	}
 

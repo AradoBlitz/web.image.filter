@@ -9,8 +9,9 @@
 <title>Web Image Filter</title>
 </head>
 <body>
+	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 	<c:out value="Image ${first}!"></c:out>
 	<img alt="" src="ImageListServlet/${first}" height="400" width="600">
-
+	</c:forEach>
 </body>
 </html>
