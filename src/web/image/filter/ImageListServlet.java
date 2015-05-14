@@ -38,10 +38,8 @@ public class ImageListServlet extends HttpServlet {
 			request.setAttribute("imagesNumber", 3);
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		}else if(request.getRequestURL().toString().contains("/image/")){
-			InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
-			
 			ImageFilterApplication imgFApp = new ImageFilterApplication();
-			imgFApp.addImage(image);
+			imgFApp.addImage(getServletContext().getResourceAsStream("/sample.jpg"));
 			response.getOutputStream().write(imgFApp.getImages().get(0));
 		}
 	}
