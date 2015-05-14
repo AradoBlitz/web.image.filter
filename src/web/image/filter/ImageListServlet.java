@@ -3,6 +3,8 @@ package web.image.filter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -36,16 +38,13 @@ public class ImageListServlet extends HttpServlet {
 			request.setAttribute("imagesNumber", 3);
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		}else if(request.getRequestURL().toString().contains("/image/")){
-			byte[] buffer = new byte[1024];
-			int count = 0;
 			InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
-			ByteArrayOutputStream outStr = new ByteArrayOutputStream();
+			List<byte[]> imageList = new ArrayList<byte[]>();
+			ImageFilterApplication imgFApp = new ImageFilterApplication();
+			imgFApp.imageList = imageList;
+			imgFApp.addImage(image);
 			
-			while((count = image.read(buffer))>-1){
-				outStr.write(buffer, 0, count);
-				
-			}
-			response.getOutputStream().write(outStr.toByteArray());
+			response.getOutputStream().write(imageList.get(0));
 		}
 	}
 
