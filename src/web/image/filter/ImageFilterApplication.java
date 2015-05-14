@@ -3,11 +3,12 @@ package web.image.filter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageFilterApplication {
 
-	public List<byte[]> imageList;
+	private List<byte[]> imageList = new ArrayList<byte[]>();
 
 	public void addImage(InputStream image) throws IOException {
 		byte[] buffer = new byte[1024];
@@ -23,7 +24,7 @@ public class ImageFilterApplication {
 
 	public List<byte[]> getImages() {
 		// TODO Auto-generated method stub
-		return null;
+		return imageList;
 	}
 
 }

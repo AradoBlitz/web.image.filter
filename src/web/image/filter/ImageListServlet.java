@@ -39,12 +39,10 @@ public class ImageListServlet extends HttpServlet {
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		}else if(request.getRequestURL().toString().contains("/image/")){
 			InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
-			List<byte[]> imageList = new ArrayList<byte[]>();
-			ImageFilterApplication imgFApp = new ImageFilterApplication();
-			imgFApp.imageList = imageList;
-			imgFApp.addImage(image);
 			
-			response.getOutputStream().write(imageList.get(0));
+			ImageFilterApplication imgFApp = new ImageFilterApplication();
+			imgFApp.addImage(image);
+			response.getOutputStream().write(imgFApp.getImages().get(0));
 		}
 	}
 
