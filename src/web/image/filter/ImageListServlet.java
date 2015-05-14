@@ -14,7 +14,7 @@ import org.apache.tomcat.jni.Buffer;
 /**
  * Servlet implementation class ImageListServlet
  */
-@WebServlet(urlPatterns = {"/ImageListServlet","/ImageListServlet/*","/image/*"})
+@WebServlet(urlPatterns = {"/image/*","/imagelist"})
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,11 +30,17 @@ public class ImageListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		byte[] buffer = new byte[1024];
-		int count = 0;
-		InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
-		while((count = image.read(buffer))>-1){
-			response.getOutputStream().write(buffer , 0, count);
+		System.out.println(request.getRequestURL());
+		if(request.getRequestURL().toString().contains("/imagelist")){
+			request.setAttribute("imagesNumber", 3);
+			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
+		}else if(request.getRequestURL().toString().contains("/image/")){
+			byte[] buffer = new byte[1024];
+			int count = 0;
+			InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
+			while((count = image.read(buffer))>-1){
+				response.getOutputStream().write(buffer , 0, count);
+			}
 		}
 	}
 
