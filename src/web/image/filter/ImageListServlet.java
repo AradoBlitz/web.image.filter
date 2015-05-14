@@ -1,5 +1,6 @@
 package web.image.filter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -38,9 +39,13 @@ public class ImageListServlet extends HttpServlet {
 			byte[] buffer = new byte[1024];
 			int count = 0;
 			InputStream image = getServletContext().getResourceAsStream("/sample.jpg");
+			ByteArrayOutputStream outStr = new ByteArrayOutputStream();
+			
 			while((count = image.read(buffer))>-1){
-				response.getOutputStream().write(buffer , 0, count);
+				outStr.write(buffer, 0, count);
+				
 			}
+			response.getOutputStream().write(outStr.toByteArray());
 		}
 	}
 
