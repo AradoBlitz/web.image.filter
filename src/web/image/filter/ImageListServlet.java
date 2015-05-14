@@ -14,7 +14,7 @@ import org.apache.tomcat.jni.Buffer;
 /**
  * Servlet implementation class ImageListServlet
  */
-@WebServlet(urlPatterns = {"/ImageListServlet","/ImageListServlet/*"})
+@WebServlet(urlPatterns = {"/ImageListServlet","/ImageListServlet/*","/image/*"})
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

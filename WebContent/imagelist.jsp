@@ -11,7 +11,7 @@
 <body>
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 	<c:out value="Image ${first}!"></c:out>
-	<img alt="" src="ImageListServlet/${first}" height="400" width="600">
+	<img alt="" src="image/${first}" height="400" width="600">
 	</c:forEach>
 </body>
 </html>
