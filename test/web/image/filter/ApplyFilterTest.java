@@ -41,6 +41,8 @@ public class ApplyFilterTest {
 				, output.toByteArray());
 	}
 
+	
+	
 	private byte[] getResourceAsByte(byte[] buff, String string) throws Exception {
 		InputStream expected = getClass().getClassLoader().getResourceAsStream(string);
 		expected.read(buff);
