@@ -9,6 +9,10 @@
 <title>Web Image Filter</title>
 </head>
 <body>
+	<form id="uploadimage"  method="post" action="upload" enctype="multipart/form-data">
+		<input id="imagefile"  type="file" name="file"/>
+		<input id="submit" value="submit" type="submit"/>
+	</form>
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 	<c:out value="Image ${first}!"></c:out>
 	<img alt="" src="image/${first}" height="400" width="600">
