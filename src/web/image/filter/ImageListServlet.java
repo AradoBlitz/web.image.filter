@@ -18,7 +18,7 @@ import javax.servlet.http.Part;
 /**
  * Servlet implementation class ImageListServlet
  */
-@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload"})
+@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload","/download/*"})
 @MultipartConfig	
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -67,6 +67,16 @@ public class ImageListServlet extends HttpServlet {
 					System.out.println("Image size: " + b.length);
 					response.getOutputStream().write(b);
 				}
+		} else if(requestPath.contains("/download/")){
+			
+			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
+			List<byte[]> images = imgFApp.getImages();
+			if(index<images.size()) {
+				response.setContentType("application/octet-stream");
+				byte[] b = images.get(index);
+				response.setContentLength(b.length);
+				response.getOutputStream().write(b);
+			}
 		}
 	}
 
