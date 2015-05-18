@@ -34,12 +34,13 @@ public class ImageListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(request.getRequestURL());
+		ImageFilterApplication imgFApp = new ImageFilterApplication();
+		imgFApp.addImage(getServletContext().getResourceAsStream("/sample.jpg"));
 		if(request.getRequestURL().toString().contains("/imagelist")){
-			request.setAttribute("imagesNumber", 3);
+			request.setAttribute("imagesNumber", imgFApp.getImages().size());
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		}else if(request.getRequestURL().toString().contains("/image/")){
-			ImageFilterApplication imgFApp = new ImageFilterApplication();
-			imgFApp.addImage(getServletContext().getResourceAsStream("/sample.jpg"));
+			
 			response.getOutputStream().write(imgFApp.getImages().get(0));
 		}
 	}
