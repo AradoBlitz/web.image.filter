@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ImageFilterApplication {
 		return imageList;
 	}
 
-	public void applyFilter(int i, String string, ByteArrayOutputStream actual) throws Exception {
+	public void applyFilter(int i, String string, OutputStream actual) throws Exception {
 		
 		int index = i-1;
 		BufferedImage source = ImageIO.read(new ByteArrayInputStream(imageList.get(index)));
@@ -44,9 +45,10 @@ public class ImageFilterApplication {
 		
 		DiffusionFilter filter = new DiffusionFilter();
 		filter.filter(source, result);
-		
-		ImageIO.write(result, "jpg", actual);
-		filtered = actual.toByteArray();
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(result, "jpg", baos);
+		filtered = baos.toByteArray();
+		actual.write(filtered);
 		this.filteredIndex = index;
 	}
 
