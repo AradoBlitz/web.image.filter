@@ -18,7 +18,7 @@ import javax.servlet.http.Part;
 /**
  * Servlet implementation class ImageListServlet
  */
-@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload","/download/*","/apply/*","/accept"})
+@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload","/download/*","/apply/*","/accept","/filteredimage"})
 @MultipartConfig	
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -78,22 +78,33 @@ public class ImageListServlet extends HttpServlet {
 				response.getOutputStream().write(b);
 			}
 		} else if(requestPath.contains("/apply/")){
-			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
-			List<byte[]> images = imgFApp.getImages();
-			if(index<=images.size()) {			
-				try {
-					System.out.println("Filter name: " + requestPath.split("/")[5]);
-					imgFApp.applyFilter(index, requestPath.split("/")[5], response.getOutputStream());
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
+			if(requestPath.contains("/filteredimage")){
+				response.getOutputStream().write(imgFApp.getFilteredImage());
+
+			} else if(requestPath.contains("/accept")){
+				imgFApp.acceptFilteredImage();
+				request.setAttribute("imagesNumber", imgFApp.getImages().size());
+				response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
+			} else {
+				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
+				List<byte[]> images = imgFApp.getImages();
+				if(index<=images.size()) {			
+					try {
+						//System.out.println("Filter name: " + requestPath.split("/")[5]);
+						imgFApp.applyFilter(index);
+						request.getServletContext().getRequestDispatcher("/filteredimage.html").forward(request, response);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
 			}
 		} else if(requestPath.contains("/accept")){
 			imgFApp.acceptFilteredImage();
 			request.setAttribute("imagesNumber", imgFApp.getImages().size());
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
-		}
+		} 
 	}
 
 	/**

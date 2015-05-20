@@ -39,6 +39,16 @@ public class ImageFilterApplication {
 
 	public void applyFilter(int i, String string, OutputStream actual) throws Exception {
 		
+		applyFilter(i);
+		
+		actual.write(getFilteredImage());
+	}
+
+	public byte[] getFilteredImage() {
+		return filtered;
+	}
+
+	public void applyFilter(int i) throws IOException {
 		int index = i-1;
 		BufferedImage source = ImageIO.read(new ByteArrayInputStream(imageList.get(index)));
 		BufferedImage result = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
@@ -47,13 +57,12 @@ public class ImageFilterApplication {
 		filter.filter(source, result);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(result, "jpg", baos);
-		filtered = baos.toByteArray();
-		actual.write(filtered);
+		filtered = baos.toByteArray();		
 		this.filteredIndex = index;
 	}
 
 	public void acceptFilteredImage() {
-		imageList.set(filteredIndex, filtered);
+		imageList.set(filteredIndex, getFilteredImage());
 		
 	}
 

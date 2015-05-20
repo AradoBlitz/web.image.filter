@@ -16,6 +16,7 @@
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 	<c:out value="Image ${first}!"></c:out>
 	<img alt="" src="image/${first}" height="400" width="600">
+	<a href="apply/DiffusionFilter/${first}" >Apply Filter</a>
 	</c:forEach>
 </body>
 </html>
