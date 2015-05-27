@@ -36,4 +36,9 @@ public class Image {
 		return new Image(string, outStr.toByteArray());
 	}
 
+	public Image updateByteBody(byte[] byteArray) {
+		// TODO Auto-generated method stub
+		return new Image(name,byteArray);
+	}
+
 }

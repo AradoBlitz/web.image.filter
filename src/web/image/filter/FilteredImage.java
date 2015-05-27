@@ -28,7 +28,7 @@ public class FilteredImage {
 		filter.filter(source, result);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(result, imgObjList.get(index).getExtension(), baos);
-		filteredObj = new Image(imgObjList.get(index).name, baos.toByteArray());
+		filteredObj = imgObjList.get(index).updateByteBody(baos.toByteArray());
 		filtered = baos.toByteArray();
 		
 	}
