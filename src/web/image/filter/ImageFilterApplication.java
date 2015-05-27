@@ -11,11 +11,8 @@ public class ImageFilterApplication {
 	private List<Image> imgObjList = new ArrayList<>();
 	private FilteredImage filteredImage;
 
-	public void addImage(InputStream image) throws IOException {
-		
-
-		imgObjList.add(Image.read("input.jpg",image));
-
+	public void addImage(Image read) {
+		imgObjList.add(read);
 	}
 
 	public List<Image> getImages() {

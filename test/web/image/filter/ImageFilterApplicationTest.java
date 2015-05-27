@@ -11,8 +11,7 @@ import org.junit.Test;
 
 public class ImageFilterApplicationTest {
 	
-//	/static final byte[] SAMPLE_JPG = getImageAsByteArray(ImageFilterApplicationTest.class,"sample.jpg");
-	
+
 	ImageFilterApplication containsOneImage = new ImageFilterApplication();
 
 	ImageFilterApplication containsFilteredImage = new ImageFilterApplication();
@@ -25,13 +24,15 @@ public class ImageFilterApplicationTest {
 	
 	@Before
 	public void initOneImageApplication() throws Exception {
-		containsOneImage.addImage(getClass().getClassLoader().getResourceAsStream("sample.jpg"));
+		InputStream image = getClass().getClassLoader().getResourceAsStream("sample.jpg");
+		containsOneImage.addImage(Image.read("sample.jpg",image));
 		
 	}
 	
 	@Before
 	public void initContainsFilteredImage() throws Exception {
-		containsFilteredImage.addImage(getClass().getClassLoader().getResourceAsStream("sample.jpg"));
+		InputStream image = getClass().getClassLoader().getResourceAsStream("sample.jpg");
+		containsFilteredImage.addImage(Image.read("sample.jpg",image));
 		containsFilteredImage.applyFilter(new FilteredImage(0));
 	}
 	

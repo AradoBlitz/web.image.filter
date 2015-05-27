@@ -38,7 +38,8 @@ public class ImageListServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		super.init(config);
 		 try {
-				imgFApp.addImage(config.getServletContext().getResourceAsStream("/sample.jpg"));
+				InputStream imageStub = config.getServletContext().getResourceAsStream("/sample.jpg");
+				imgFApp.addImage(Image.read("sample.jpg",imageStub));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -126,7 +127,7 @@ public class ImageListServlet extends HttpServlet {
             }
 									 
 			
-			imgFApp.addImage(new ByteArrayInputStream(out.toByteArray()));
+			imgFApp.addImage(Image.read("sample.jpg",new ByteArrayInputStream(out.toByteArray())));
 			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 			
 		} 
