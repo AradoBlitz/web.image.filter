@@ -11,7 +11,7 @@ public class ImageFilterApplication {
 	private FilteredImage filteredImage;
 
 	public void addImage(Image read) {
-		imgObjList.add(read);
+		imgObjList.add(0,read);
 	}
 
 	public List<Image> getImages() {
