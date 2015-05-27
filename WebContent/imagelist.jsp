@@ -26,7 +26,8 @@
 				<c:set var="item" value="${imageList[index]}"></c:set>
 				<c:out value="Image ${item.name}!"></c:out>
 			</td>
-			<td rowspan="2">
+			
+			<td rowspan="3">
 				<img alt="" src="image/${first}" height="400" width="600">
 			</td>
 		</tr>
@@ -36,7 +37,7 @@
 			</td>
 			
 		</tr>
-		
+		<tr><td><a href="#">Download</a></td></tr>
 	</c:forEach>
 </table>
 </body>
