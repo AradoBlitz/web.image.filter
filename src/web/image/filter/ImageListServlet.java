@@ -115,6 +115,7 @@ public class ImageListServlet extends HttpServlet {
 		String requestPath = request.getRequestURL().toString();	
 			
 		if(requestPath.contains("/upload")){
+			
 	        final Part filePart = request.getPart("file");
 	        ByteArrayOutputStream out = new ByteArrayOutputStream();
 	        InputStream filecontent = null;
@@ -127,10 +128,24 @@ public class ImageListServlet extends HttpServlet {
             }
 									 
 			
-			imgFApp.addImage(Image.read("sample.jpg",new ByteArrayInputStream(out.toByteArray())));
+			String fileName = getFileName(filePart);
+			System.out.println("Uploaded file name: " + fileName);
+			imgFApp.addImage(Image.read(fileName,new ByteArrayInputStream(out.toByteArray())));
 			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 			
 		} 
 	}
+	
+	 private String getFileName(Part part) {
+	        String contentDisp = part.getHeader("content-disposition");
+	        System.out.println("content-disposition header= "+contentDisp);
+	        String[] tokens = contentDisp.split(";");
+	        for (String token : tokens) {
+	            if (token.trim().startsWith("filename")) {
+	                return token.substring(token.indexOf("=") + 2, token.length()-1);
+	            }
+	        }
+	        return "";
+	    }
 
 }
