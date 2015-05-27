@@ -59,6 +59,8 @@ public class ImageListServlet extends HttpServlet {
 		
 		if(requestPath.contains("/imagelist")){
 			request.setAttribute("imagesNumber", imgFApp.getImages().size());
+			request.setAttribute("imageList", imgFApp.getImages());
+			request.setAttribute("image", imgFApp.getImages().get(0));
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		} else if(requestPath.contains("/image/")){
 				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;

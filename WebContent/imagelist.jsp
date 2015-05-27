@@ -13,8 +13,13 @@
 		<input id="imagefile"  type="file" name="file"/>
 		<input id="submit" value="submit" type="submit"/>
 	</form>
+	
+   
+
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
-	<c:out value="Image ${first}!"></c:out>
+	<c:set var="index" value="${first-1}"></c:set>
+	<c:set var="item" value="${imageList[index]}"></c:set>
+	<c:out value="Image ${item.name}!"></c:out>
 	<img alt="" src="image/${first}" height="400" width="600">
 	<a href="apply/DiffusionFilter/${first}" >Apply Filter</a>
 	</c:forEach>

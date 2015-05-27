@@ -41,4 +41,7 @@ public class Image {
 		return new Image(name,byteArray);
 	}
 
+	public String getName(){
+		return name;
+	}
 }
