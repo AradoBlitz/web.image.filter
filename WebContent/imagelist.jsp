@@ -27,17 +27,22 @@
 				<c:out value="Image ${item.name}!"></c:out>
 			</td>
 			
-			<td rowspan="3">
+			<td rowspan="2">
 				<img alt="" src="image/${first}" height="400" width="600">
 			</td>
 		</tr>
 		<tr>	
 			<td>	
 				<a href="apply/DiffusionFilter/${first}" >Apply Filter</a>
+				<br>
+				<br>
+				<a href="download/${first}">Download</a>
+				<br>
+				<br>
+				<a href="delete/${first}">Delete</a>
 			</td>
 			
 		</tr>
-		<tr><td><a href="#">Download</a></td></tr>
 	</c:forEach>
 </table>
 </body>

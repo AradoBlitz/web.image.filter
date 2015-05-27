@@ -18,7 +18,7 @@ import javax.servlet.http.Part;
 /**
  * Servlet implementation class ImageListServlet
  */
-@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload","/download/*","/apply/*","/accept","/filteredimage"})
+@WebServlet(urlPatterns = {"/image/*","/imagelist","/upload","/download/*","/apply/*","/accept","/filteredimage","/delete/*"})
 @MultipartConfig	
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -75,11 +75,22 @@ public class ImageListServlet extends HttpServlet {
 			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
 			List<Image> images = imgFApp.getImages();
 			if(index<images.size()) {
-				response.setContentType("application/octet-stream");
+				response.setContentType("application/force-download");
+				
 				byte[] b = images.get(index).image;
 				response.setContentLength(b.length);
+				response.setHeader("Content-Transfer-Encoding", "binary");
+				response.setHeader("Content-Disposition","attachment; filename=\"" + images.get(index).getName() + "\"");
 				response.getOutputStream().write(b);
 			}
+		}  if(requestPath.contains("/delete/")){
+			
+			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
+			List<Image> images = imgFApp.getImages();
+			if(index<images.size()) { 
+				imgFApp.getImages().remove(index);
+			}
+			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 		} else if(requestPath.contains("/apply/")){
 			if(requestPath.contains("/filteredimage")){
 				response.getOutputStream().write(imgFApp.getFilteredImage());
