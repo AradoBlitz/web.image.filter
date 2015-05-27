@@ -61,19 +61,19 @@ public class ImageListServlet extends HttpServlet {
 			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		} else if(requestPath.contains("/image/")){
 				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-				List<byte[]> images = imgFApp.getImages();
+				List<Image> images = imgFApp.getImages();
 				if(index<images.size()) {
-					byte[] b = images.get(index);
+					byte[] b = images.get(index).image;
 					System.out.println("Image size: " + b.length);
 					response.getOutputStream().write(b);
 				}
 		} else if(requestPath.contains("/download/")){
 			
 			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-			List<byte[]> images = imgFApp.getImages();
+			List<Image> images = imgFApp.getImages();
 			if(index<images.size()) {
 				response.setContentType("application/octet-stream");
-				byte[] b = images.get(index);
+				byte[] b = images.get(index).image;
 				response.setContentLength(b.length);
 				response.getOutputStream().write(b);
 			}
@@ -87,11 +87,11 @@ public class ImageListServlet extends HttpServlet {
 				response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 			} else {
 				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
-				List<byte[]> images = imgFApp.getImages();
+				List<Image> images = imgFApp.getImages();
 				if(index<=images.size()) {			
 					try {
 						//System.out.println("Filter name: " + requestPath.split("/")[5]);
-						imgFApp.applyFilter(index);
+						imgFApp.applyFilter(new FilteredImage(index-1));
 						request.getServletContext().getRequestDispatcher("/filteredimage.html").forward(request, response);
 					} catch (Exception e) {
 						// TODO Auto-generated catch block

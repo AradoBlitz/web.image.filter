@@ -11,6 +11,8 @@ import org.junit.Test;
 
 public class ImageFilterApplicationTest {
 	
+//	/static final byte[] SAMPLE_JPG = getImageAsByteArray(ImageFilterApplicationTest.class,"sample.jpg");
+	
 	ImageFilterApplication containsOneImage = new ImageFilterApplication();
 
 	ImageFilterApplication containsFilteredImage = new ImageFilterApplication();
@@ -30,7 +32,7 @@ public class ImageFilterApplicationTest {
 	@Before
 	public void initContainsFilteredImage() throws Exception {
 		containsFilteredImage.addImage(getClass().getClassLoader().getResourceAsStream("sample.jpg"));
-		containsFilteredImage.applyFilter(1,"DiffusionFilter",new ByteArrayOutputStream());
+		containsFilteredImage.applyFilter(new FilteredImage(0));
 	}
 	
 	@Test
@@ -45,7 +47,8 @@ public class ImageFilterApplicationTest {
 		
 		ByteArrayOutputStream actual = new ByteArrayOutputStream();
 	
-		containsOneImage.applyFilter(1,"DiffusionFilter",actual);
+		containsOneImage.applyFilter(new FilteredImage(0));
+		actual.write(containsFilteredImage.getFilteredImage());
 		assertArrayEquals(getImageAsByteArray("filtered.jpg"), actual.toByteArray());
 	}
 
@@ -53,21 +56,26 @@ public class ImageFilterApplicationTest {
 	public void acceptNullFilteredImage() throws Exception {
 		
 		containsOneImage.acceptFilteredImage();
-		assertArrayEquals(getImageAsByteArray("sample.jpg"), containsFilteredImage.getImages().get(0));
+		assertArrayEquals(getImageAsByteArray("sample.jpg"), containsFilteredImage.getImages().get(0).image);
 	}
 	
 	@Test
 	public void acceptFilteredImage() throws Exception {		
 	
 		containsFilteredImage.acceptFilteredImage();
-		assertArrayEquals(getImageAsByteArray("filtered.jpg"), containsFilteredImage.getImages().get(0));
+		assertArrayEquals(getImageAsByteArray("filtered.jpg"), containsFilteredImage.getImages().get(0).image);
 	}
 	
 	private byte[] getImageAsByteArray(String imageName) throws Exception {
+		
+		return  getImageAsByteArray(getClass(),imageName);
+	}
+
+	private static byte[] getImageAsByteArray(Class class1, String imageName)throws Exception {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] buff = new byte[1246734];
 		int count = 0;
-		InputStream in = getClass().getClassLoader().getResourceAsStream(imageName);
+		InputStream in = class1.getClassLoader().getResourceAsStream(imageName);
 		while((count=in.read(buff))>-1){
 			out.write(buff, 0, count);
 		}
