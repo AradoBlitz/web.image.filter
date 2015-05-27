@@ -21,18 +21,8 @@
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 		
 		<tr>
-			<td>
-				<c:set var="index" value="${first-1}"></c:set>
-				<c:set var="item" value="${imageList[index]}"></c:set>
-				<c:out value="Image ${item.name}!"></c:out>
-			</td>
-			
-			<td rowspan="2">
-				<img alt="" src="image/${first}" height="400" width="600">
-			</td>
-		</tr>
-		<tr>	
-			<td>	
+		
+			<td rowspan="2">	
 				<a href="apply/DiffusionFilter/${first}" >Apply Filter</a>
 				<br>
 				<br>
@@ -41,7 +31,18 @@
 				<br>
 				<a href="delete/${first}">Delete</a>
 			</td>
+			<td>
+				<c:set var="index" value="${first-1}"></c:set>
+				<c:set var="item" value="${imageList[index]}"></c:set>
+				<c:out value="Image ${item.name}!"></c:out>
+			</td>
 			
+			
+		</tr>
+		<tr>	
+			<td >
+				<img alt="" src="image/${first}" height="400" width="600">
+			</td>
 		</tr>
 	</c:forEach>
 </table>
