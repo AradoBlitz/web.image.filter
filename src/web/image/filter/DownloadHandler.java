@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DownloadHandler {
+public class DownloadHandler implements WebImageFilterHandler {
 
 	private ImageFilterApplication imgFApp;
 
@@ -15,7 +15,7 @@ public class DownloadHandler {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void handler(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestPath = request.getRequestURL().toString();
 		int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
 		List<Image> images = imgFApp.getImages();

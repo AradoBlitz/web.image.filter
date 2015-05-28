@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,6 +26,8 @@ public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	ImageFilterApplication imgFApp = new ImageFilterApplication();
+
+	private Map<String,WebImageFilterHandler> handlerMap = new HashMap<>();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -44,7 +48,13 @@ public class ImageListServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+		 	handlerMap.put("upload", new UploadHandler(imgFApp));			
+			handlerMap.put("imagelist", new ImagelistHandler(imgFApp));
+			handlerMap.put("image", new ImageHandler(imgFApp));
+			handlerMap.put("download",new DownloadHandler(imgFApp));
+			handlerMap.put("delete",new DeleteHandler(imgFApp));
+			handlerMap.put("apply",new ApplyHandler(imgFApp));			
+			
 	}
 
 
@@ -52,50 +62,26 @@ public class ImageListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println(request.getRequestURL());
-		System.out.println(request.getContextPath());
 		
-		String requestPath = request.getRequestURL().toString();
-		ImagelistHandler imglst = new ImagelistHandler(imgFApp);
-		ImageHandler img = new ImageHandler(imgFApp);
-		DownloadHandler download = new DownloadHandler(imgFApp);
-		DeleteHandler delete = new DeleteHandler(imgFApp);
-		ApplyHandler apply = new ApplyHandler(imgFApp);
+		System.out.println(request.getRequestURI());
+		String command = request.getRequestURI().split("/")[2];
+		System.out.println("Command " + command);
 		
-		if(requestPath.contains("/imagelist")){			
-			imglst.handle(request,response);
-		} else if(requestPath.contains("/image/")){
-				
-				img.handle(request,response);
-		} else if(requestPath.contains("/download/")){
-			
-			
-			download.handler(request,response);
-		}  if(requestPath.contains("/delete/")){
-			
-			
-			delete.handle(request,response);
-		} else if(requestPath.contains("/apply/")){
-			
-			apply.handle(request,response);
-		} else if(requestPath.contains("/accept")){
-			imgFApp.acceptFilteredImage();
-			request.setAttribute("imagesNumber", imgFApp.getImages().size());
-			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
-		} 
+		
+		handlerMap.get(command).handle(request,response);
+		 
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String requestPath = request.getRequestURL().toString();	
-		UploadHandler upload = new UploadHandler(imgFApp);	
-		if(requestPath.contains("/upload")){
-			
-	        
-			upload.handle(request,response);
-		} 
+		System.out.println(request.getRequestURI());
+		String command = request.getRequestURI().split("/")[2];
+		System.out.println("Command " + command);
+		
+		handlerMap.get("upload").handle(request,response);
+		 
 	}
 	
 	 

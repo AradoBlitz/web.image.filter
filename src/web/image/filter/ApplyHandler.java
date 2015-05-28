@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ApplyHandler {
+public class ApplyHandler implements WebImageFilterHandler {
 
 	private ImageFilterApplication imgFApp;
 
