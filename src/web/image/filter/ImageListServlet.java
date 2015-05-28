@@ -56,64 +56,28 @@ public class ImageListServlet extends HttpServlet {
 		System.out.println(request.getContextPath());
 		
 		String requestPath = request.getRequestURL().toString();
+		ImagelistHandler imglst = new ImagelistHandler(imgFApp);
+		ImageHandler img = new ImageHandler(imgFApp);
+		DownloadHandler download = new DownloadHandler(imgFApp);
+		DeleteHandler delete = new DeleteHandler(imgFApp);
+		ApplyHandler apply = new ApplyHandler(imgFApp);
 		
-		if(requestPath.contains("/imagelist")){
-			request.setAttribute("imagesNumber", imgFApp.getImages().size());
-			request.setAttribute("imageList", imgFApp.getImages());
-			request.setAttribute("image", imgFApp.getImages().get(0));
-			request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
+		if(requestPath.contains("/imagelist")){			
+			imglst.handle(request,response);
 		} else if(requestPath.contains("/image/")){
-				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-				List<Image> images = imgFApp.getImages();
-				if(index<images.size()) {
-					byte[] b = images.get(index).image;
-					System.out.println("Image size: " + b.length);
-					response.getOutputStream().write(b);
-				}
+				
+				img.handle(request,response);
 		} else if(requestPath.contains("/download/")){
 			
-			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-			List<Image> images = imgFApp.getImages();
-			if(index<images.size()) {
-				response.setContentType("application/force-download");
-				
-				byte[] b = images.get(index).image;
-				response.setContentLength(b.length);
-				response.setHeader("Content-Transfer-Encoding", "binary");
-				response.setHeader("Content-Disposition","attachment; filename=\"" + images.get(index).getName() + "\"");
-				response.getOutputStream().write(b);
-			}
+			
+			download.handler(request,response);
 		}  if(requestPath.contains("/delete/")){
 			
-			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-			List<Image> images = imgFApp.getImages();
-			if(index<images.size()) { 
-				imgFApp.getImages().remove(index);
-			}
-			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
+			
+			delete.handle(request,response);
 		} else if(requestPath.contains("/apply/")){
-			if(requestPath.contains("/filteredimage")){
-				response.getOutputStream().write(imgFApp.getFilteredImage());
-
-			} else if(requestPath.contains("/accept")){
-				imgFApp.acceptFilteredImage();
-				request.setAttribute("imagesNumber", imgFApp.getImages().size());
-				response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
-			} else {
-				int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
-				List<Image> images = imgFApp.getImages();
-				if(index<=images.size()) {			
-					try {
-						//System.out.println("Filter name: " + requestPath.split("/")[5]);
-						imgFApp.applyFilter(new FilteredImage(index-1));
-						request.getServletContext().getRequestDispatcher("/filteredimage.html").forward(request, response);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
-			}
+			
+			apply.handle(request,response);
 		} else if(requestPath.contains("/accept")){
 			imgFApp.acceptFilteredImage();
 			request.setAttribute("imagesNumber", imgFApp.getImages().size());
@@ -126,39 +90,14 @@ public class ImageListServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String requestPath = request.getRequestURL().toString();	
-			
+		UploadHandler upload = new UploadHandler(imgFApp);	
 		if(requestPath.contains("/upload")){
 			
-	        final Part filePart = request.getPart("file");
-	        ByteArrayOutputStream out = new ByteArrayOutputStream();
-	        InputStream filecontent = null;
-	        filecontent = filePart.getInputStream();
-	        int read = 0;
-            final byte[] bytes = new byte[1024];
-
-            while ((read = filecontent.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-									 
-			
-			String fileName = getFileName(filePart);
-			System.out.println("Uploaded file name: " + fileName);
-			imgFApp.addImage(Image.read(fileName,new ByteArrayInputStream(out.toByteArray())));
-			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
-			
+	        
+			upload.handle(request,response);
 		} 
 	}
 	
-	 private String getFileName(Part part) {
-	        String contentDisp = part.getHeader("content-disposition");
-	        System.out.println("content-disposition header= "+contentDisp);
-	        String[] tokens = contentDisp.split(";");
-	        for (String token : tokens) {
-	            if (token.trim().startsWith("filename")) {
-	                return token.substring(token.indexOf("=") + 2, token.length()-1);
-	            }
-	        }
-	        return "";
-	    }
+	 
 
 }
