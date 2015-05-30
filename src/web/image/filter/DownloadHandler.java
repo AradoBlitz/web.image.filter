@@ -6,19 +6,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class DownloadHandler implements WebImageFilterHandler {
-
-	private ImageFilterApplication imgFApp;
-
-	public DownloadHandler(ImageFilterApplication imgFApp) {
-		this.imgFApp = imgFApp;
-		// TODO Auto-generated constructor stub
-	}
+public class DownloadHandler extends SessionImageList implements WebImageFilterHandler {
 
 	public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestPath = request.getRequestURL().toString();
 		int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1)) - 1;
-		List<Image> images = imgFApp.getImages();
+		List<Image> images = getImageList(request);
 		if(index<images.size()) {
 			response.setContentType("application/force-download");
 			

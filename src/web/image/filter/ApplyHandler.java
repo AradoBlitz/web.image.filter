@@ -6,32 +6,32 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ApplyHandler implements WebImageFilterHandler {
+public class ApplyHandler extends SessionImageList {
 
-	private ImageFilterApplication imgFApp;
+	
 
-	public ApplyHandler(ImageFilterApplication imgFApp) {
-		this.imgFApp = imgFApp;
-		// TODO Auto-generated constructor stub
+	public ApplyHandler() {
+	
 	}
 
 	public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestPath = request.getRequestURL().toString();
 		if(requestPath.contains("/filteredimage")){
-			response.getOutputStream().write(imgFApp.getFilteredImage());
+			response.getOutputStream().write(getFilteredImage(request));
 
 		} else if(requestPath.contains("/accept")){
-			imgFApp.acceptFilteredImage();
-			request.setAttribute("imagesNumber", imgFApp.getImages().size());
+			acceptAppliedFilter(request).applyFilter(getImageList(request));
+			
+			request.setAttribute("imagesNumber", getImageList(request).size());
 			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 		} else {
 			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
-			List<Image> images = imgFApp.getImages();
+			List<Image> images = getImageList(request);
 			if(index<=images.size()) {			
 				try {
-					//System.out.println("Filter name: " + requestPath.split("/")[5]);
-					imgFApp.applyFilter(new FilteredImage(index-1));
-					request.getServletContext().getRequestDispatcher("/filteredimage.html").forward(request, response);
+					
+					applyFilterToImage(request, index, getImageList(request));
+ 					request.getServletContext().getRequestDispatcher("/filteredimage.html").forward(request, response);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -39,6 +39,25 @@ public class ApplyHandler implements WebImageFilterHandler {
 				
 			}
 		}
+	}
+
+	private void applyFilterToImage(HttpServletRequest request, int index,
+			List<Image> imageList) throws IOException {
+		FilteredImage filteredImage = new FilteredImage(index-1);
+		filteredImage.applyFilter(imageList);
+		request.getSession().setAttribute("filteredImage", filteredImage);
+	}
+
+	private FilteredImage acceptAppliedFilter(HttpServletRequest request)
+			throws IOException {
+		FilteredImage filteredImage = (FilteredImage) request.getSession().getAttribute("filteredImage");
+		return filteredImage;//filteredImage.applyFilter(getImageList(request));
+	}
+
+	private byte[] getFilteredImage(HttpServletRequest request) {
+		FilteredImage filteredImage = (FilteredImage) request.getSession().getAttribute("filteredImage");
+		byte[] image = filteredImage.filtered;
+		return image;
 	}
 
 }

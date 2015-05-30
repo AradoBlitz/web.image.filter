@@ -9,12 +9,20 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.jhlabs.image.DiffusionFilter;
 
 public class ApplyFilterTest {
 
+	@Ignore
+	@Test
+	public void listeningFiltersInClasspath() throws Exception {
+		
+		
+	}
+	
 	@Test
 	public void getImageFromClasspath() throws Exception {
 		

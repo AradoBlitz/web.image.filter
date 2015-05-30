@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 public class UploadHandler implements WebImageFilterHandler {
-
-	private ImageFilterApplication imgFApp;
-
-	public UploadHandler(ImageFilterApplication imgFApp) {
-		this.imgFApp = imgFApp;
-		// TODO Auto-generated constructor stub
-	}
 
 	public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		final Part filePart = request.getPart("file");
@@ -34,7 +28,8 @@ public class UploadHandler implements WebImageFilterHandler {
 		
 		String fileName = getFileName(filePart);
 		System.out.println("Uploaded file name: " + fileName);
-		imgFApp.addImage(Image.read(fileName,new ByteArrayInputStream(out.toByteArray())));
+		List<Image> imageList = (List<Image>) request.getSession().getAttribute("imageList");
+		imageList.add(0,Image.read(fileName,new ByteArrayInputStream(out.toByteArray())));
 		response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
 		
 	}

@@ -1,11 +1,7 @@
 package web.image.filter;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -15,7 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 /**
  * Servlet implementation class ImageListServlet
@@ -25,8 +20,7 @@ import javax.servlet.http.Part;
 public class ImageListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	ImageFilterApplication imgFApp = new ImageFilterApplication();
-
+		
 	private Map<String,WebImageFilterHandler> handlerMap = new HashMap<>();
     /**
      * @see HttpServlet#HttpServlet()
@@ -41,19 +35,13 @@ public class ImageListServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		// TODO Auto-generated method stub
 		super.init(config);
-		 try {
-				InputStream imageStub = config.getServletContext().getResourceAsStream("/sample.jpg");
-				imgFApp.addImage(Image.read("sample.jpg",imageStub));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		 	handlerMap.put("upload", new UploadHandler(imgFApp));			
-			handlerMap.put("imagelist", new ImagelistHandler(imgFApp));
-			handlerMap.put("image", new ImageHandler(imgFApp));
-			handlerMap.put("download",new DownloadHandler(imgFApp));
-			handlerMap.put("delete",new DeleteHandler(imgFApp));
-			handlerMap.put("apply",new ApplyHandler(imgFApp));			
+		
+		 	handlerMap.put("upload", new UploadHandler());			
+			handlerMap.put("imagelist", new ImagelistHandler());
+			handlerMap.put("image", new ImageHandler());
+			handlerMap.put("download",new DownloadHandler());
+			handlerMap.put("delete",new DeleteHandler());
+			handlerMap.put("apply",new ApplyHandler());			
 			
 	}
 
@@ -66,7 +54,7 @@ public class ImageListServlet extends HttpServlet {
 		System.out.println(request.getRequestURI());
 		String command = request.getRequestURI().split("/")[2];
 		System.out.println("Command " + command);
-		
+		System.out.println("Current image list: " + request.getSession().getAttribute("imageList"));
 		
 		handlerMap.get(command).handle(request,response);
 		 
