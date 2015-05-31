@@ -41,7 +41,9 @@ public class ImageListServlet extends HttpServlet {
 			handlerMap.put("image", new ImageHandler());
 			handlerMap.put("download",new DownloadHandler());
 			handlerMap.put("delete",new DeleteHandler());
-			handlerMap.put("apply",new ApplyHandler());			
+			handlerMap.put("apply",new ApplyHandler());
+			handlerMap.put("filteredimage", new FilteredImageHandler());
+			handlerMap.put("accept", new AcceptFilteredImageHandler());
 			
 	}
 

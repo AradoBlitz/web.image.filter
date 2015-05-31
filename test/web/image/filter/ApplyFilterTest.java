@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -37,24 +40,41 @@ public class ApplyFilterTest {
 	
 	@Test
 	public void applyCurlFilterToImage() throws Exception {
-		DiffusionFilter filter = new DiffusionFilter();
-		BufferedImage arg0 = ImageIO.read(getResource("sample.jpg"));
-		BufferedImage arg1 = new BufferedImage(arg0.getWidth(), arg0.getHeight(), arg0.getType());
-		filter.filter(arg0 , arg1);
-		ByteArrayOutputStream output = new ByteArrayOutputStream();
-		ImageIO.write(arg1, "jpg", output);
+		List<Image> imageList = new ArrayList<Image>();
+		imageList.add(Image.read("sample.jpg", getResourceAsStream("sample.jpg")));
+		FilteredImage imageFilter = new FilteredImage(0);
+		imageFilter.applyFilter("DiffusionFilter", imageList);
 		
-		assertArrayEquals(
-				getResourceAsByte(new byte[1246734],"filtered.jpg")
-				, output.toByteArray());
+		
+		imageFilter.acceptFilteredImage(imageList );
+		assertArrayEquals(Image.read("filtered.jpg", getResourceAsStream("filtered.jpg")).image
+				, imageList.get(0).image);
 	}
 
-	
+	private byte[] getImageAsByteArray(String imageName) throws Exception {
+		
+		return  getImageAsByteArray(getClass(),imageName);
+	}
+
+	private static byte[] getImageAsByteArray(Class class1, String imageName)throws Exception {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		byte[] buff = new byte[1246734];
+		int count = 0;
+		InputStream in = class1.getClassLoader().getResourceAsStream(imageName);
+		while((count=in.read(buff))>-1){
+			out.write(buff, 0, count);
+		}
+		return out.toByteArray();
+	}
 	
 	private byte[] getResourceAsByte(byte[] buff, String string) throws Exception {
-		InputStream expected = getClass().getClassLoader().getResourceAsStream(string);
+		InputStream expected = getResourceAsStream(string);
 		expected.read(buff);
 		return buff;
+	}
+
+	private InputStream getResourceAsStream(String string) {
+		return getClass().getClassLoader().getResourceAsStream(string);
 	}
 	
 }

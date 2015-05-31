@@ -14,15 +14,21 @@
 		<input id="submit" value="submit" type="submit"/>
 	</form>
 	
-   
-
-	
 	<table width="600" border="3">
 	<c:forEach begin="1" end="${imagesNumber}" step="1" var="first">
 		
 		<tr>		
-			<td rowspan="2">	
-				<a id="applyfilter" href="apply/DiffusionFilter/${first}" >Apply Filter</a>
+			<td rowspan="2">
+				<form action="apply">
+					<select name="filter">
+					<c:forEach var='filter' items='${filterList}'>
+						<option value="${filter}">${filter}</option>
+					</c:forEach>
+					</select>
+					<input type="hidden" name="image" value="${first}"/>
+					<!-- a id="applyfilter" href="apply/DiffusionFilter/${first}" >Apply Filter</a-->
+					<input type="submit" value="Apply Filter"/>
+				</form>
 				<br>
 				<br>
 				<a id="download" href="download/${first}">Download</a>

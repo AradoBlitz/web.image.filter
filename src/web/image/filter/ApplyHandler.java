@@ -15,17 +15,7 @@ public class ApplyHandler extends SessionImageList {
 	}
 
 	public void handle(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String requestPath = request.getRequestURL().toString();
-		if(requestPath.contains("/filteredimage")){
-			response.getOutputStream().write(getFilteredImage(request));
-
-		} else if(requestPath.contains("/accept")){
-			acceptAppliedFilter(request).applyFilter(getImageList(request));
-			
-			request.setAttribute("imagesNumber", getImageList(request).size());
-			response.sendRedirect("http://localhost:8080" + request.getContextPath() + "/imagelist");
-		} else {
-			int index = Integer.parseInt(requestPath.substring(requestPath.lastIndexOf('/')+1));
+			int index = Integer.parseInt(request.getParameter("image"));
 			List<Image> images = getImageList(request);
 			if(index<=images.size()) {			
 				try {
@@ -38,13 +28,14 @@ public class ApplyHandler extends SessionImageList {
 				}
 				
 			}
-		}
+		
 	}
 
 	private void applyFilterToImage(HttpServletRequest request, int index,
 			List<Image> imageList) throws IOException {
+		String filterName = request.getParameter("filter");
 		FilteredImage filteredImage = new FilteredImage(index-1);
-		filteredImage.applyFilter(imageList);
+		filteredImage.applyFilter(filterName,imageList);
 		request.getSession().setAttribute("filteredImage", filteredImage);
 	}
 

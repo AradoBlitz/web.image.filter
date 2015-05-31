@@ -31,6 +31,7 @@ public class ImagelistHandler extends SessionImageList {
 		List<Image> imageList = getImageList(request);
 		request.setAttribute("imagesNumber", imageList.size());
 		request.setAttribute("imageList", imageList);
+		request.setAttribute("filterList", FilteredImage.filterMap.keySet());
 		request.getServletContext().getRequestDispatcher("/imagelist.jsp").forward(request, response);
 		
 	}
