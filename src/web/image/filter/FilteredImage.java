@@ -9,7 +9,13 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import com.jhlabs.image.CausticsFilter;
 import com.jhlabs.image.DiffusionFilter;
+import com.jhlabs.image.DilateFilter;
+import com.jhlabs.image.ErodeFilter;
+import com.jhlabs.image.LifeFilter;
+import com.jhlabs.image.OutlineFilter;
+import com.jhlabs.image.SkeletonFilter;
 import com.jhlabs.image.WholeImageFilter;
 
 public class FilteredImage {
@@ -17,6 +23,14 @@ public class FilteredImage {
 	public final static Map<String,WholeImageFilter> filterMap = new HashMap<>();
 	static {
 		filterMap.put("DiffusionFilter", new DiffusionFilter());
+		/* Binary filters */
+		filterMap.put("ErodeFilter", new ErodeFilter());
+		filterMap.put("DilateFilter", new DilateFilter());
+		filterMap.put("LifeFilter", new LifeFilter());
+		filterMap.put("OutlineFilter", new OutlineFilter());
+		filterMap.put("SkeletonFilter", new SkeletonFilter());
+		
+		filterMap.put("CausticsFilter", new CausticsFilter());
 	}
 	public final int index;
 	public byte[] filtered;
